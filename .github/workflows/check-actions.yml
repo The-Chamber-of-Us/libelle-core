@@ -1,0 +1,17 @@
+name: Check GitHub Actions
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  check-actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Confirm action runs
+        run: echo "GitHub Actions is working for DevOps Playbook push!"

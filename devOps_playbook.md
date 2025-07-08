@@ -21,7 +21,7 @@ Here’s what we’re planning so far:
 
 - Frontend: linting, build checks, and deployment to Netlify (once frontend code is ready)
 - Backend: testing, formatting checks, and API validation (to be defined)
-- Terraform: optional dry-run validations if we move forward with infrastructure-as-code
+- Terraform: optional dry-run validations if we move forward with infrastructure-as-code [FUTURE SCOPE]
 
 We’ll start by adding a simple placeholder GitHub Action that runs on pull requests and pushes to 'main', just to validate that automation is wired up.
 

@@ -1,11 +1,6 @@
 import re
 from typing import List, Dict
 
-
-# -------------------------
-# 1. Basic Information Parsers
-# -------------------------
-
 def extract_email(text: str) -> List[str]:
     return re.findall(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}", text)
 
@@ -33,10 +28,6 @@ def extract_name(text: str) -> str:
     return "Name Not Found"
 
 
-# -------------------------
-# 2. Section: Skills
-# -------------------------
-
 def extract_skills(text: str) -> List[str]:
     lines = [line.strip() for line in text.split('\n') if line.strip()]
     skills_lines = []
@@ -56,10 +47,6 @@ def extract_skills(text: str) -> List[str]:
     return [skill.strip() for skill in skills if skill.strip()]
 
 
-# -------------------------
-# 3. Section: Education
-# -------------------------
-
 def extract_education(text: str) -> List[str]:
     lines = [line.strip() for line in text.split('\n') if line.strip()]
     education_lines = []
@@ -78,10 +65,6 @@ def extract_education(text: str) -> List[str]:
 
     return [line for line in education_lines if line.strip()]
 
-
-# -------------------------
-# 4. Section Parsing Utilities
-# -------------------------
 
 def _get_lines(text: str) -> List[str]:
     return [line.rstrip() for line in text.splitlines()]
@@ -170,10 +153,6 @@ def _group_into_entries(section_lines: List[str]) -> List[str]:
     return entries
 
 
-# -------------------------
-# 5. Experience Sections
-# -------------------------
-
 def extract_work_experience(text: str):
     lines = _get_lines(text)
     work_start_patterns = [r'work experience', r'experience', r'employment']
@@ -187,10 +166,6 @@ def extract_project_experience(text: str, start_index: int):
     project_lines, _ = _collect_section_lines(lines, project_start_patterns)
     return _group_into_entries(project_lines)
 
-
-# -------------------------
-# 6. Main Parser
-# -------------------------
 
 def parse_resume(text: str) -> Dict[str, any]:
     work_experience, work_end_index = extract_work_experience(text)

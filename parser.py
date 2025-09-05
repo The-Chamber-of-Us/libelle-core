@@ -1,3 +1,5 @@
+from nameparser import HumanName
+from names_dataset import NameDataset
 import re
 from typing import List, Dict
 
@@ -17,49 +19,122 @@ def extract_phone(text: str) -> List[str]:
 
     return cleaned
 
+nd = NameDataset()
 
 def extract_name(text: str) -> str:
-    for line in text.splitlines():
-        if not line.strip() or re.search(r'\d|\@', line):
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+
+    stop_headers = [
+        "education", "work", "experience", "employment", "projects",
+        "skills", "summary", "objective", "volunteer", "leadership"
+    ]
+
+    for line in lines:
+        if any(h in line.lower() for h in stop_headers):
+            break
+
+        line_no_email = re.sub(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}", "", line).strip()
+        if not line_no_email:
             continue
-        words = line.strip().split()
-        if 2 <= len(words) <= 4:
-            return line.strip()
+
+        line_no_contact = re.sub(r"\+?\d[\d\s().-]{8,}\d", "", line_no_email).strip()
+        if not line_no_contact:
+            continue
+
+        if line_no_contact.isupper() and 2 <= len(line_no_contact.split()) <= 4:
+            candidate = HumanName(line_no_contact.title())
+            if candidate.first and candidate.last:
+                return str(candidate)
+
+        tokens = re.findall(r"[A-Za-z]+", line_no_contact)
+        if len(tokens) >= 2:
+            first, last = tokens[0], tokens[1]
+            if nd.search_first_name(first.capitalize()) and nd.search_last_name(last.capitalize()):
+                candidate = HumanName(" ".join(tokens[:3]))
+                return str(candidate)
+
+    for line in lines[:3]:
+        if any(h in line.lower() for h in stop_headers):
+            break
+        candidate = HumanName(line)
+        if candidate.first and candidate.last:
+            return str(candidate)
+
     return "Name Not Found"
+
+def extract_location(text: str) -> List[str]:
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    candidate_lines = []
+    
+    for line in lines[:5]:
+        if re.search(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}", line):
+            continue
+        if re.search(r"\+?\d[\d\s().-]{8,}\d", line):
+            continue
+        candidate_lines.append(line)
+    
+    locations = []
+    pattern_city_first = re.compile(r'\b([A-Z][a-zA-Z]+(?: [A-Z][a-zA-Z]+)*),\s*([A-Z]{2})(?:,\s*(\d{5}))?\b')
+    pattern_state_first = re.compile(r'\b([A-Z]{2}),\s*([A-Z][a-zA-Z]+(?: [A-Z][a-zA-Z]+)*)(?:,\s*(\d{5}))?\b')
+    
+    for line in candidate_lines:
+        match = pattern_city_first.search(line)
+        if match:
+            city, state, zip_code = match.groups()
+            loc = f"{city}, {state}"
+            if zip_code:
+                loc += f", {zip_code}"
+            locations.append(loc)
+            return locations 
+        
+        match = pattern_state_first.search(line)
+        if match:
+            state, city, zip_code = match.groups()
+            loc = f"{city}, {state}"
+            if zip_code:
+                loc += f", {zip_code}"
+            locations.append(loc)
+            return locations 
+    
+    return locations
 
 
 def extract_skills(text: str) -> List[str]:
-    lines = [line.strip() for line in text.split('\n') if line.strip()]
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
     skills_lines = []
     in_skills_section = False
 
     for line in lines:
-        if re.match(r'^\s*(SKILLS)\s*$', line, re.IGNORECASE):
+        if re.search(r'\bskills\b', line, re.IGNORECASE):
             in_skills_section = True
             continue
-        elif in_skills_section and re.match(r'^[A-Z\s&]+$', line) and len(line) < 50:
+        elif in_skills_section and re.match(r'^[A-Z][A-Z\s&]+$', line) and len(line) < 50:
             break
         elif in_skills_section:
             skills_lines.append(line)
 
-    combined_skills = " ".join(skills_lines)
-    skills = re.split(r'•|,|·|;', combined_skills)
-    return [skill.strip() for skill in skills if skill.strip()]
+    skills = []
+    for line in skills_lines:
+        parts = re.split(r'•|,|·|;', line)
+        for part in parts:
+            clean_part = part.strip()
+            if clean_part:
+                skills.append(clean_part)
+
+    return skills
 
 
 def extract_education(text: str) -> List[str]:
-    lines = [line.strip() for line in text.split('\n') if line.strip()]
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
     education_lines = []
     in_education_section = False
 
     for line in lines:
-        if re.match(r'^(education(\s*&\s*certificate)?|education & certification)$', line.strip(), re.IGNORECASE):
+        if re.search(r'\beducation\b', line, re.IGNORECASE):
             in_education_section = True
             continue
-
-        elif in_education_section and re.match(r'^[A-Z\s&]+$', line.strip()) and len(line.strip()) < 50:
+        elif in_education_section and re.match(r'^[A-Z][A-Z\s&]+$', line) and len(line) < 50:
             break
-
         elif in_education_section:
             education_lines.append(line)
 
@@ -175,6 +250,7 @@ def parse_resume(text: str) -> Dict[str, any]:
         "name": extract_name(text),
         "emails": extract_email(text),
         "phones": extract_phone(text),
+        "locations": extract_location(text),
         "skills": extract_skills(text),
         "education": extract_education(text),
         "work_experience": work_experience,

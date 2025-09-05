@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Libelle Volunteer Intake – MVP
 
 An open-source intake system built by **The Chamber of Us (TCUS)** to onboard volunteers in a simple, trustworthy, and structured way.  
@@ -85,3 +86,4 @@ Maintainers:
 
 ## 📜 License
 AGPL v3.0 – open source, free to use and improve.
+=======

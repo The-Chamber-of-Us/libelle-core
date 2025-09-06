@@ -1,0 +1,56 @@
+# Context Brief: The Private Sandbox Repository
+
+**Date:** September 5, 2025  
+**Author:** Kevin Schmidt  
+
+---
+
+## The Why: The Problem
+
+As a small, volunteer-driven nonprofit, we want to empower contributors to **experiment and learn** without the fear of breaking the build.  
+
+Right now, our **main** and branches are public and shared.  
+
+This means:
+
+- Any mistake (like exposing an API key) could affect the team.  
+- Some volunteers may hesitate to try new things, worried they’ll “mess up” the project.  
+
+That anxiety kills momentum — and exploration is how we grow.
+
+---
+
+## The What: Our Approach
+
+We are introducing a **private sandbox repository** for volunteers.  
+It’s like a **personal lab bench**: safe, separate, and no pressure.  
+
+- Volunteers can test, debug, and refine their code privately.  
+- Only when ready, they move clean code back into the public repo.  
+- This lowers risk, builds confidence, and keeps our public history clean.  
+
+---
+
+## The How: The Process
+
+### Volunteer Workflow
+1. **Request Access** → Ask an admin (e.g., Kevin) to create your sandbox repo.  
+2. **Connect Your Repo** → Link your local codebase to the sandbox as a secondary remote.  
+3. **Experiment Freely** → Commit as much as you want — it’s private!  
+4. **Polish & Clean** → When ready, tidy your commit history.  
+5. **Push Publicly** → Submit a pull request to the **test-version** branch of the main repo.  
+
+### Admin Workflow
+1. **Create Repo** → Make a private repo in GitHub.  
+2. **Naming Convention** → `libelle-sandbox-[volunteer-name]`  
+   - Example: `libelle-sandbox-jiaqi`  
+3. **Grant Access** → Add the volunteer as a collaborator.  
+
+---
+
+## What’s Next
+- Do volunteers find this clear and safe?  
+- Should we add a **“clean commits” checklist**?  
+- Can we automate sandbox repo creation?  
+
+---

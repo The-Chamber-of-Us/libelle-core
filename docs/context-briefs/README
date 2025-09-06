@@ -1,0 +1,52 @@
+# 📚 Context Briefs
+
+Welcome to the **Context Briefs** library for Libelle!  
+This is where we capture **living knowledge** — the *why* and *how* behind decisions, experiments, and practices at TCUS.  
+
+Think of these as **mini field notes**: part history, part guide, part experiment log.  
+They are *not* meeting minutes, *not* PRDs — they’re snapshots of learning that help us and future contributors understand **why we work the way we do**.  
+
+---
+
+## ✨ What Goes Here
+- Short documents (1–2 pages) that explain **context** around a decision or practice.  
+- Examples:  
+  - Why we added a **private sandbox repo** for developers.  
+  - How HCI principles apply to **CR-002 (Index Page Experiment)**.  
+  - Lessons from a sprint retrospective worth carrying forward.  
+
+---
+
+## 🛠 How to Add a Brief
+1. Create a new file in this folder.  
+2. Use the format:
+
+Example:  
+`2025-09-05-private-sandbox-repo.md`  
+
+3. At the top of your file, include:
+- **Title**  
+- **Date**  
+- **Author**  
+- **Related Artifacts** (links to PRDs, GitHub repos, etc.)  
+
+4. Write your brief in sections (suggested):  
+- **The Why** (problem or context)  
+- **The What** (decision or idea)  
+- **The How** (process, workflow, or implementation)  
+- **What’s Next** (open questions, next steps)  
+
+---
+
+## 🎨 Style & Tone
+- Be clear, but keep it human.  
+- Use lists, headings, and even emojis if they help.  
+- Imagine someone joining the project in 6 months — what would you want them to know?  
+
+---
+
+## 🌍 Why This Matters
+Libelle is volunteer-powered and global 🌎.  
+We made a space where **a volunteer in Nigeria, a student in Kansas, and a retiree in Raleigh** could all contribute to the same vision.  
+
+These briefs are how we **carry our learning forward** and make sure the wisdom of today becomes the foundation for tomorrow.    
